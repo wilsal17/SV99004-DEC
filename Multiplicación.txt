@@ -1,0 +1,54 @@
+;2 Multiplicación
+section .data
+    num1 dd 2             
+    num2 dd 2             
+    msg db "Resultado: "  
+    len equ $ - msg       
+
+section .bss
+    mult resb 11         
+
+section .text
+    global _start
+
+_start:
+    ; Multiplicar los dos números
+    mov eax, [num1]       
+    imul eax, dword [num2]
+    mov [mult], eax       
+    
+    ; Convertir el resultado de la multiplicación a una cadena de caracteres
+    mov ecx, 10          
+    mov edi, mult + 10   
+    mov byte [edi], 0     
+    .loop:
+        xor edx, edx     
+        div ecx          
+        add dl, '0'       
+        dec edi           
+        mov [edi], dl    
+        test eax, eax    
+        jnz .loop         
+
+    ; Calcular la longitud de la cadena resultante
+    mov ebx, mult + 10    
+    sub ebx, edi          
+    mov edx, ebx          
+
+    ; Imprimir el mensaje
+    mov eax, 4            
+    mov ebx, 1            
+    mov ecx, msg          
+    mov edx, len         
+    int 0x80             
+
+    ; Imprimir el resultado de la multiplicación
+    mov eax, 4           
+    mov ebx, 1           
+    mov ecx, edi          
+    mov edx, ebx         
+    int 0x80              
+
+    mov eax, 1           
+    xor ebx, ebx          
+    int 0x80 

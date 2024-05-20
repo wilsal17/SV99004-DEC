@@ -1,0 +1,39 @@
+;1 Resta de tres enteros
+section .data
+    num1 dd 50    ; Primer número
+    num2 dd 20    ; Segundo número
+    num3 dd 10    ; Tercer número
+    msg db "El resultado de la resta es: "    
+    leng equ $ - msg
+
+section .bss
+    resultado resd 1    
+
+section .text
+    global _start
+
+_start:
+    ; Resta de los tres números
+    mov eax, [num1]      
+    sub eax, [num2]      
+    sub eax, [num3]      
+    mov [resultado], eax 
+    
+    ; Imprimir el mensaje
+    mov eax, 4           
+    mov ebx, 1           
+    mov ecx, msg          
+    mov edx, leng        
+    int 0x80             
+
+    ; Imprimir el resultado de la resta
+    mov eax, 4            
+    mov ebx, 1           
+    mov ecx, resultado    
+    mov edx, 4           
+    int 0x80            
+
+    ; Salir del programa
+    mov eax, 1           
+    xor ebx, ebx         
+    int 0x80
